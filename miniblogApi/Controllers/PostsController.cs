@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using miniblogApi.Models;
+using miniblog.Data;
 
 namespace miniblogApi.Controllers
 {
@@ -13,9 +14,9 @@ namespace miniblogApi.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly miniblogApiContext _context;
+        private readonly PostContext _context;
 
-        public PostsController(miniblogApiContext context)
+        public PostsController(PostContext context)
         {
             _context = context;
         }
@@ -24,14 +25,14 @@ namespace miniblogApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Post.ToListAsync();
         }
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Post.FindAsync(id);
 
             if (post == null)
             {
@@ -77,7 +78,7 @@ namespace miniblogApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
-            _context.Posts.Add(post);
+            _context.Post.Add(post);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPost", new { id = post.Id }, post);
@@ -87,13 +88,13 @@ namespace miniblogApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Post.FindAsync(id);
             if (post == null)
             {
                 return NotFound();
             }
 
-            _context.Posts.Remove(post);
+            _context.Post.Remove(post);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +102,7 @@ namespace miniblogApi.Controllers
 
         private bool PostExists(int id)
         {
-            return _context.Posts.Any(e => e.Id == id);
+            return _context.Post.Any(e => e.Id == id);
         }
     }
 }

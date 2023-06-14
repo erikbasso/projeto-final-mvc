@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using miniblogApi.Models;
 using Microsoft.Extensions.DependencyInjection;
-
+using miniblog.Data;
 
 namespace miniblogApi
 {
@@ -23,12 +23,7 @@ namespace miniblogApi
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.ConfigureServices((hostContext, services) =>
-                    {
-                        services.AddDbContext<miniblogApiContext>(options =>
-                        options.UseInMemoryDatabase("miniblog"));
-                    });
+                { 
                     webBuilder.UseStartup<Startup>();
                 });
     }
